@@ -1,0 +1,73 @@
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+`include "../sv/env/gpio_interface.sv"
+`include "../sv/env/gpio_reg_interface.sv"
+`include "../sve/gpio.sv"
+import gpio_pkg::*;
+
+module tb;
+  logic clk = 0;
+  logic rst_n;
+  string freq_str;
+  real freq;
+  real clk_period;
+  //gpio interface handle
+  gpio_if gif(.clk(clk),.rst_n(rst_n));
+  //gpio register interface handle
+  gpio_reg_if grif (.clk(clk),.rst_n(rst_n));
+
+  GPIO dut (.clk(clk),.rst_n(rst_n),.WRITE(grif.WRITE),.ADDRESS(grif.ADDRESS),.WDATA(grif.WDATA),.RDATA(grif.RDATA),.GPIO_IN(gif.gpio_in),.GPIO_OUT(gif.gpio_out));
+
+  initial begin
+    gif.print();
+    grif.print();
+    run_test("gpio_test");
+  end
+  initial begin
+    if($value$plusargs("freq=%s", freq_str)) begin
+      string unit;
+      real freq_val;
+      if($sscanf(freq_str, "%f%s", freq_val, unit)) begin
+
+      // Normalize to Hz
+        if(unit == "Hz" || unit == "hz")
+          freq = freq_val;
+        else if(unit == "kHz" || unit == "KHz")
+          freq = freq_val * 1e3;
+        else if (unit == "MHz" || unit == "mhz")
+          freq = freq_val * 1e6;
+        else if (unit == "GHz" || unit == "ghz")
+          freq = freq_val * 1e9;
+      end
+    end
+    //if frequency is not provided from argument
+    else begin
+      // Default frequency is 50MHz
+      freq = 50e6; // in HZ
+    end
+	
+    clk_period = ((1/(freq)) * 1e9);
+
+    $info("freq = %0.2f Hz, clk_period = %0.2f ns", freq, clk_period);
+  end
+
+  // Clock generation
+  initial begin
+    //----------------------------- CLOCK CHECkER -------------------------------
+    if(clk_period < 0)
+      `uvm_error("TB_TOP","INVALID FREQUENCY IS PROVIDED (PLEASE PROVIDE VALID FREQUENCY)")
+    forever #(clk_period / 2) clk = ~clk;  //clk designed based on  Frequency
+  end
+
+  initial begin
+    rst_n = 1;
+    #5 rst_n = 0;
+    #10 rst_n = 1;
+  end
+
+  initial begin
+    $dumpfile("gpio.vcd");
+    $dumpvars(0,tb);
+  end
+ 
+endmodule

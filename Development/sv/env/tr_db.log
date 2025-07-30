@@ -1,0 +1,2 @@
+  CREATE_STREAM @0 {NAME:orseq T:Transactions SCOPE:uvm_test_top.genv.gr_agent.grseqr STREAM:829}
+  CREATE_STREAM @0 {NAME:iseq T:Transactions SCOPE:uvm_test_top.genv.g_agent.gseqr STREAM:832}

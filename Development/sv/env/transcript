@@ -1,0 +1,159 @@
+# vsim -c work.tb_opt -do "add wave -r /*; run -all" 
+# Start time: 12:08:03 on Jul 30,2025
+# Loading /tmp/intern@Admin_dpi_8354/linux_gcc-13/export_tramp.so
+# //  Questa Sim
+# //  Version 2021.2_1 linux May 15 2021
+# //
+# //  Copyright 1991-2021 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.gpio_reg_if(fast)
+# Loading work.gpio_if(fast)
+# Loading mtiUvm.uvm_pkg(fast)
+# Loading work.gpio_pkg(fast)
+# Loading work.tb_sv_unit(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading work.tb(fast)
+# Loading work.gpio_if(fast__3)
+# Loading work.gpio_reg_if(fast__3)
+# Loading work.GPIO(fast)
+# ** Warning: (vsim-3764) Stand-alone call to function 'print' treated as implicit void cast.
+#    Time: 0 ns  Iteration: 0  Instance: /tb File: ../../top/tb.sv Line: 22
+# ** Warning: (vsim-3764) Stand-alone call to function 'print' treated as implicit void cast.
+#    Time: 0 ns  Iteration: 0  Instance: /tb File: ../../top/tb.sv Line: 23
+# Compiling /tmp/intern@Admin_dpi_8354/linux_gcc-13/exportwrapper.c
+# Loading /tmp/intern@Admin_dpi_8354/linux_gcc-13/vsim_auto_compile.so
+# Loading /home/intern/Questasim/Mentor_Graphics_QuestaSim_2021.2.1/installation/questasim/uvm-1.2/linux/uvm_dpi.so
+# add wave -r /*
+#  run -all
+# UVM_INFO verilog_src/uvm-1.2/src/base/uvm_root.svh(392) @ 0: reporter [UVM/RELNOTES] 
+# ----------------------------------------------------------------
+# UVM-1.2
+# (C) 2007-2014 Mentor Graphics Corporation
+# (C) 2007-2014 Cadence Design Systems, Inc.
+# (C) 2006-2014 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# (C) 2013-2014 NVIDIA Corporation
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_DO_NOT_NEED_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
+# getting interface : tb.gif
+# ------------------------------------getting interface : tb.grif
+# UVM_INFO @ 0: reporter [RNTST] Running test gpio_test...
+# ** Info: freq = 50000000.00 Hz, clk_period = 20.00 ns
+#    Time: 0 ns  Scope: tb File: ../../top/tb.sv Line: 51
+# hello from test
+# hello mon
+# befor seq start
+# hello from seq
+# hello adapter : 4294967295
+# UVM_INFO gpio_driver.sv(30) @ 5: uvm_test_top.genv.g_agent.gdrv [uvm_test_top.genv.g_agent.gdrv] gpio_in value driven on interface : x
+# UVM_INFO gpio_reg_driver.sv(33) @ 5: uvm_test_top.genv.gr_agent.grdrv [uvm_test_top.genv.gr_agent.grdrv] [5] : value of WDATA : x, WRITE : x, ADDRESS : x
+# UVM_INFO gpio_driver.sv(30) @ 10: uvm_test_top.genv.g_agent.gdrv [uvm_test_top.genv.g_agent.gdrv] gpio_in value driven on interface : 0
+# UVM_INFO gpio_reg_driver.sv(33) @ 10: uvm_test_top.genv.gr_agent.grdrv [uvm_test_top.genv.gr_agent.grdrv] [10] : value of WDATA : 0, WRITE : 0, ADDRESS : z
+# UVM_INFO gpio_reg_monitor.sv(38) @ 10: uvm_test_top.genv.gr_agent.grmon [uvm_test_top.genv.gr_agent.grmon] [10] : value of RDATA : x, WRITE : 0, ADDRESS : z
+# UVM_INFO gpio_reg_monitor.sv(38) @ 30: uvm_test_top.genv.gr_agent.grmon [uvm_test_top.genv.gr_agent.grmon] [30] : value of RDATA : x, WRITE : 0, ADDRESS : z
+# UVM_INFO gpio_reg_driver.sv(33) @ 30: uvm_test_top.genv.gr_agent.grdrv [uvm_test_top.genv.gr_agent.grdrv] [30] : value of WDATA : 0, WRITE : 0, ADDRESS : z
+# UVM_INFO gpio_driver.sv(30) @ 30: uvm_test_top.genv.g_agent.gdrv [uvm_test_top.genv.g_agent.gdrv] gpio_in value driven on interface : 0
+# UVM_INFO ../seqlib/out_reg_seq.sv(23) @ 30: uvm_test_top.genv.gr_agent.grseqr@@orseq [REG_SEQ] DIR Register mirrored value : ffffffff
+# hello adapter : 0
+# ------------------------------------------------
+# Name         Type              Size  Value      
+# ------------------------------------------------
+# mtr          gpio_transaction  -     @835       
+#   gpio_in    integral          32    'hffff     
+#   gpio_out   integral          32    'h0        
+#   gpio_intr  integral          32    'h0xxxxxxxx
+# ------------------------------------------------
+# UVM_INFO gpio_scoreboard.sv(35) @ 30: uvm_test_top.genv.gscb [uvm_test_top.genv.gscb] count of gpio_no_total : 1
+# UVM_INFO gpio_monitor.sv(31) @ 30: uvm_test_top.genv.g_agent.gmon [uvm_test_top.genv.g_agent.gmon] [30] : value of gpio_in : ffff, gpio_out : 0, gpio_intr : x
+# UVM_INFO gpio_reg_monitor.sv(27) @ 50: uvm_test_top.genv.gr_agent.grmon [uvm_test_top.genv.gr_agent.grmon] [50] : value of WDATA : ffffffff, WRITE : 1, ADDRESS : 8
+# --------------------------------------------------
+# Name       Type                  Size  Value      
+# --------------------------------------------------
+# mtr        gpio_reg_transaction  -     @948       
+#   ADDRESS  integral              32    'h8        
+#   WDATA    integral              32    'hffffffff 
+#   RDATA    integral              32    'h0xxxxxxxx
+#   WRITE    integral              1     'h1        
+# --------------------------------------------------
+# UVM_INFO gpio_scoreboard.sv(51) @ 50: uvm_test_top.genv.gscb [uvm_test_top.genv.gscb] count of regtr_no_total : 1
+# UVM_INFO gpio_reg_driver.sv(33) @ 50: uvm_test_top.genv.gr_agent.grdrv [uvm_test_top.genv.gr_agent.grdrv] [50] : value of WDATA : ffffffff, WRITE : 1, ADDRESS : 8
+# UVM_INFO gpio_reg_monitor.sv(38) @ 70: uvm_test_top.genv.gr_agent.grmon [uvm_test_top.genv.gr_agent.grmon] [70] : value of RDATA : x, WRITE : 0, ADDRESS : 0
+# UVM_INFO gpio_reg_monitor.sv(38) @ 90: uvm_test_top.genv.gr_agent.grmon [uvm_test_top.genv.gr_agent.grmon] [90] : value of RDATA : ffff, WRITE : 0, ADDRESS : 0
+# --------------------------------------------------
+# Name       Type                  Size  Value      
+# --------------------------------------------------
+# mtr        gpio_reg_transaction  -     @964       
+#   ADDRESS  integral              32    'h0        
+#   WDATA    integral              32    'h0xxxxxxxx
+#   RDATA    integral              32    'hffff     
+#   WRITE    integral              1     'h0        
+# --------------------------------------------------
+# UVM_INFO gpio_scoreboard.sv(51) @ 90: uvm_test_top.genv.gscb [uvm_test_top.genv.gscb] count of regtr_no_total : 2
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[15] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[14] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[13] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[12] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[11] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[10] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[9] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[8] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[7] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[6] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[5] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[4] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[3] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[2] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[1] on output pin: actual=1, expected=1
+# UVM_ERROR gpio_scoreboard.sv(91) @ 90: uvm_test_top.genv.gscb [GPIO_SB] Invalid gpio_in[0] on output pin: actual=1, expected=1
+# after seq start
+# UVM_INFO verilog_src/uvm-1.2/src/base/uvm_objection.svh(1270) @ 90: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# UVM_INFO gpio_scoreboard.sv(104) @ 90: uvm_test_top.genv.gscb [uvm_test_top.genv.gscb] Final count -> regtr_no_total : [2] , gpio_no_total : [1]
+# UVM_INFO verilog_src/uvm-1.2/src/base/uvm_report_server.svh(847) @ 90: reporter [UVM/REPORT/SERVER] 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :   23
+# UVM_WARNING :    0
+# UVM_ERROR :   16
+# UVM_FATAL :    0
+# ** Report counts by id
+# [GPIO_SB]    16
+# [Questa UVM]     2
+# [REG_SEQ]     1
+# [RNTST]     1
+# [TEST_DONE]     1
+# [UVM/RELNOTES]     1
+# [uvm_test_top.genv.g_agent.gdrv]     3
+# [uvm_test_top.genv.g_agent.gmon]     1
+# [uvm_test_top.genv.gr_agent.grdrv]     4
+# [uvm_test_top.genv.gr_agent.grmon]     5
+# [uvm_test_top.genv.gscb]     4
+# 
+# ** Note: $finish    : /home/intern/Questasim/Mentor_Graphics_QuestaSim_2021.2.1/installation/questasim/linux/../verilog_src/uvm-1.2/src/base/uvm_root.svh(517)
+#    Time: 90 ns  Iteration: 74  Instance: /tb
+# End time: 12:08:06 on Jul 30,2025, Elapsed time: 0:00:03
+# Errors: 0, Warnings: 2
