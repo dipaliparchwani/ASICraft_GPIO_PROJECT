@@ -20,7 +20,7 @@ class gpio_driver extends uvm_driver #(gpio_transaction);
       gpio_transaction dtr;
       @(posedge gvif.clk or negedge gvif.rst_n);
       if(!gvif.rst_n) begin
-        gvif.gpio_in <= 32'h00000000;
+        gvif.gpio_in <= 'hz;
       end
       else begin
         seq_item_port.get_next_item(dtr);

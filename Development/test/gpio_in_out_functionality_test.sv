@@ -1,0 +1,34 @@
+class gpio_in_out_functionality_test extends uvm_test;
+  `uvm_component_utils(gpio_in_out_functionality_test)
+ 
+  function new(input string name = "gpio_test", uvm_component parent = null);
+    super.new(name,parent);
+  endfunction
+ 
+  gpio_env genv;
+  in_out_reg_seq iorseq;
+  in_seq iseq;
+ 
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    genv = gpio_env::type_id::create("genv",this);
+    iorseq  = in_out_reg_seq::type_id::create("iorseq");
+    iseq   = in_seq::type_id::create("iseq");
+  endfunction
+ 
+  virtual task run_phase(uvm_phase phase);
+  
+    phase.raise_objection(this);
+    iorseq.regmodel = genv.regmodel;
+    `uvm_info(get_full_name(),"before seq start",UVM_MEDIUM);
+    fork
+      iseq.start(genv.g_agent.gseqr);
+      iorseq.start(genv.gr_agent.grseqr);
+    join
+    phase.drop_objection(this);
+    `uvm_info(get_full_name(),"after seq start",UVM_MEDIUM);
+  
+
+  endtask
+endclass
+ 

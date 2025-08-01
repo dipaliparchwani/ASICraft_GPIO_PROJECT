@@ -7,15 +7,13 @@
 /*DEVELOPER    : Dipali                                                                                 */
 /*------------------------------------------------------------------------------------------------------*/
 /******************************************************************************************************************/
-`include "uvm_macros.svh"
-import uvm_pkg::*;
 class gpio_data_out_reg extends uvm_reg;
   `uvm_object_utils(gpio_data_out_reg)
 
   rand uvm_reg_field DATA_OUT;
 
   function new(string name = "gpio_data_out_reg");
-    super.new(name,32,UVM_NO_COVERAGE);
+    super.new(name,`DATA_WIDTH,UVM_NO_COVERAGE);
   endfunction
 
   function void build;

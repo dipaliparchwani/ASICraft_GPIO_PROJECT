@@ -1,8 +1,5 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
-`include "../sv/env/gpio_interface.sv"
-`include "../sv/env/gpio_reg_interface.sv"
-`include "../sve/gpio.sv"
 import gpio_pkg::*;
 
 module tb;
@@ -15,6 +12,8 @@ module tb;
   gpio_if gif(.clk(clk),.rst_n(rst_n));
   //gpio register interface handle
   gpio_reg_if grif (.clk(clk),.rst_n(rst_n));
+
+  clk_period_checker chk(.clk(clk),.clk_period(clk_period));
 
   GPIO dut (.clk(clk),.rst_n(rst_n),.WRITE(grif.WRITE),.ADDRESS(grif.ADDRESS),.WDATA(grif.WDATA),.RDATA(grif.RDATA),.GPIO_IN(gif.gpio_in),.GPIO_OUT(gif.gpio_out));
 
@@ -32,12 +31,15 @@ module tb;
       // Normalize to Hz
         if(unit == "Hz" || unit == "hz")
           freq = freq_val;
-        else if(unit == "kHz" || unit == "KHz")
+        else if(unit == "KHz" || unit == "khz")
           freq = freq_val * 1e3;
         else if (unit == "MHz" || unit == "mhz")
           freq = freq_val * 1e6;
         else if (unit == "GHz" || unit == "ghz")
           freq = freq_val * 1e9;
+        else begin
+          `uvm_fatal("TB_TOP", $sformatf("Invalid frequency unit or format: '%s'.\nUse format like +freq=50MHz with valid units: Hz/kHz/MHz/GHz.",freq_str))
+	end
       end
     end
     //if frequency is not provided from argument
@@ -51,9 +53,10 @@ module tb;
     $info("freq = %0.2f Hz, clk_period = %0.2f ns", freq, clk_period);
   end
 
+
+
   // Clock generation
   initial begin
-    //----------------------------- CLOCK CHECkER -------------------------------
     if(clk_period < 0)
       `uvm_error("TB_TOP","INVALID FREQUENCY IS PROVIDED (PLEASE PROVIDE VALID FREQUENCY)")
     forever #(clk_period / 2) clk = ~clk;  //clk designed based on  Frequency

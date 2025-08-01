@@ -7,13 +7,13 @@
 //----CREATED_ON   : 21/07/2025                                                         #                                             
 //----CREATED_BY   : Dipali                                                             #
 //#######################################################################################
-interface gpio_if #(parameter DATA_WIDTH = 32) (input logic clk, input logic rst_n);   
+interface gpio_if (input logic clk, input logic rst_n);   
   //GPIO Block Signals
-  logic [DATA_WIDTH-1:0] gpio_in;    // External input to DUT   
+  logic [`DATA_WIDTH-1:0] gpio_in;    // External input to DUT   
 
-  logic [DATA_WIDTH-1:0] gpio_out;   // Output from DUT   
+  logic [`DATA_WIDTH-1:0] gpio_out;   // Output from DUT   
 
-  logic [DATA_WIDTH-1:0] gpio_intr;  // Interrupts 
+  logic [`DATA_WIDTH-1:0] gpio_intr;  // Interrupts 
 
   string inst_name = $sformatf("%m");
   function print();

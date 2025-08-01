@@ -1,9 +1,12 @@
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+`include "defines.sv"
+`include "../sv/env/gpio_interface.sv"
+`include "../sv/env/gpio_reg_interface.sv"
 package gpio_pkg;
   `include "uvm_macros.svh"
   import uvm_pkg::*;
-  `define ADDR_WIDTH 32
-  `define DATA_WIDTH 32
-  `include "../seqlib/gpio_reg_transaction.sv"
+  `include "clk_checker.sv"
   `include "../ral/gpio_data_in_reg.sv"
   `include "../ral/gpio_data_out_reg.sv"
   `include "../ral/gpio_oe_reg.sv"
@@ -13,19 +16,20 @@ package gpio_pkg;
   `include "../ral/gpio_intr_polarity_reg.sv"
   `include "../ral/gpio_dir_reg.sv"
   `include "../ral/gpio_reg_block.sv"
+  `include "../seqlib/gpio_reg_transaction.sv"
   `include "../ral/gpio_adapter.sv"
+  `include "../seqlib/gpio_transaction.sv"
+  `include "../seqlib/in_seq.sv"
+  `include "../seqlib/in_out_reg_seq.sv"
   `include "gpio_reg_seqr.sv"
   `include "gpio_reg_driver.sv"
   `include "gpio_reg_monitor.sv"
   `include "gpio_reg_agent.sv"
-  `include "../seqlib/gpio_transaction.sv"
   `include "gpio_seqr.sv"
   `include "gpio_driver.sv"
   `include "gpio_monitor.sv"
   `include "gpio_agent.sv"
   `include "gpio_scoreboard.sv"
   `include "gpio_env.sv"
-  `include "../seqlib/in_seq.sv"
-  `include "../seqlib/out_reg_seq.sv"
-  `include "../../test/gpio_test.sv"
+  `include "../../test/gpio_in_out_functionality_test.sv"
 endpackage

@@ -9,15 +9,15 @@
 //#######################################################################################
 
 
-interface gpio_reg_if #(parameter DATA_WIDTH = 32, ADDR_WIDTH = 32) (input logic clk, input logic rst_n);   
+interface gpio_reg_if  (input logic clk, input logic rst_n);   
   //Register Block Signals
-  logic [ADDR_WIDTH-1:0] ADDRESS; 
+  logic [`ADDR_WIDTH-1:0] ADDRESS; 
 
   logic WRITE;  
 
-  logic [DATA_WIDTH-1:0] WDATA;
+  logic [`DATA_WIDTH-1:0] WDATA;
 
-  logic [DATA_WIDTH-1:0] RDATA;
+  logic [`DATA_WIDTH-1:0] RDATA;
   string inst_name = $sformatf("%m");
   function print();
     $display("------------------------------------getting interface : %s",inst_name);
