@@ -20,11 +20,11 @@ class gpio_monitor extends uvm_monitor;
     forever begin
       gpio_transaction mtr = gpio_transaction::type_id::create("mtr");
       @(gvif.clk );
-      @(gvif.gpio_in or gvif.gpio_out);
+      @(gvif.gpio_in or gvif.gpio_out or gvif.gpio_intr);
       mtr.gpio_in   = gvif.gpio_in;
       mtr.gpio_out  = gvif.gpio_out;
       mtr.gpio_intr = gvif.gpio_intr;
-      if(!($isunknown(mtr.gpio_in) || $isunknown(mtr.gpio_out))) begin
+      if(!($isunknown(mtr.gpio_in) || $isunknown(mtr.gpio_out) || $isunknown(mtr.gpio_intr))) begin
         gmon_ap.write(mtr);
       end
 
@@ -37,7 +37,7 @@ class gpio_monitor extends uvm_monitor;
       
       // ######################  RESET CHECKER #######################
       if(!gvif.rst_n )
-	if((mtr.gpio_in || mtr.gpio_out || mtr.gpio_intr != 0))
+	if(((mtr.gpio_in || mtr.gpio_out || mtr.gpio_intr) != 0))
 	  `uvm_error("GPIO_MON","############## RESET CONDITION IS FAILED ################")
 
     end

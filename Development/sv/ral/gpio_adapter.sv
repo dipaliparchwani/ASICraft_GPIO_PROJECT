@@ -26,7 +26,8 @@ class gpio_adapter extends uvm_reg_adapter;
     tr.WRITE = (rw.kind == UVM_WRITE) ? 1'b1 : 1'b0;
     tr.ADDRESS = rw.addr;
 
-   tr.WDATA = (tr.WRITE == 1'b1) ?  rw.data : 32'h00000000;
+    if(tr.WRITE == 1'b1) tr.WDATA = rw.data;
+    if(tr.WRITE == 1'b0) tr.RDATA = rw.data;
    
     $display("hello adapter : %0d",tr.WDATA);
     return tr;

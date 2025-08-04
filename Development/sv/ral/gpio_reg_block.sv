@@ -62,7 +62,7 @@ class gpio_reg_block extends uvm_reg_block;
     default_map.add_reg(gpio_dir_reg_inst,'h8,"RW");
     default_map.add_reg(gpio_oe_reg_inst,'hC,"RW");
     default_map.add_reg(gpio_intr_mask_reg_inst,'h10,"RW");
-    default_map.add_reg(gpio_intr_status_reg_inst,'h14,"RO");
+    default_map.add_reg(gpio_intr_status_reg_inst,'h14,"W1C");
     default_map.add_reg(gpio_intr_type_reg_inst,'h18,"RW");
     default_map.add_reg(gpio_intr_polarity_reg_inst,'h1C,"RW");
     

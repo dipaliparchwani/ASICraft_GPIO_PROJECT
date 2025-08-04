@@ -19,9 +19,9 @@ class gpio_reg_driver extends uvm_driver #(gpio_reg_transaction);
 
       @(posedge grvif.clk or negedge grvif.rst_n);
         if(!grvif.rst_n) begin
-	  grvif.WRITE   <=  1'bz;
-	  grvif.WDATA   <=  'hz;
-	  grvif.ADDRESS <=  'hz ;
+	  grvif.WRITE   <=  1'b0;
+	  grvif.WDATA   <=  'h0;
+	  grvif.ADDRESS <=  'h0 ;
 	end
         else begin
 	  seq_item_port.get_next_item(dtr);

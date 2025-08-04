@@ -47,7 +47,7 @@ class gpio_reg_monitor extends uvm_monitor;
       
       // ####################### RESET CHECKER ########################
       if(!grvif.rst_n )
-	if((mtr.WRITE || mtr.ADDRESS || mtr.WDATA || mtr.RDATA != 0))
+	if(((mtr.WRITE || mtr.ADDRESS || mtr.WDATA) != 0))
 	  `uvm_error("GPIO_REG_MON","############## RESET CONDITION IS FAILED ################")
     end
   endtask

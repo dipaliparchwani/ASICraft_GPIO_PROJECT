@@ -7,7 +7,7 @@
 //----CREATED_ON   : 21/07/2025                                                         #                                             
 //----CREATED_BY   : Dipali                                                             #
 //#######################################################################################
-interface gpio_if (input logic clk, input logic rst_n);   
+interface gpio_if (input logic clk, output logic rst_n);   
   //GPIO Block Signals
   logic [`DATA_WIDTH-1:0] gpio_in;    // External input to DUT   
 
@@ -27,7 +27,7 @@ interface gpio_if (input logic clk, input logic rst_n);
   end
 
   
-  //clocking block for gpio
+ /* //clocking block for gpio
   clocking gpio_cb @(posedge clk);
     default input #0 output #0;
     output gpio_in;
@@ -42,7 +42,7 @@ interface gpio_if (input logic clk, input logic rst_n);
 
   //modport for gpio and monitor
   modport gpio (clocking gpio_cb,input clk,rst_n);
-  modport gmonitor (clocking gmonitor_cb,input clk,rst_n);
+  modport gmonitor (clocking gmonitor_cb,input clk,rst_n);*/
 
 
 

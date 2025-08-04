@@ -1,17 +1,15 @@
-class gpio_in_out_functionality_test extends uvm_test;
+class gpio_in_out_functionality_test extends gpio_base_test;
   `uvm_component_utils(gpio_in_out_functionality_test)
  
-  function new(input string name = "gpio_test", uvm_component parent = null);
+  function new(input string name = "gpio_in_out_functionality_test", uvm_component parent = null);
     super.new(name,parent);
   endfunction
  
-  gpio_env genv;
   in_out_reg_seq iorseq;
   in_seq iseq;
  
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    genv = gpio_env::type_id::create("genv",this);
     iorseq  = in_out_reg_seq::type_id::create("iorseq");
     iseq   = in_seq::type_id::create("iseq");
   endfunction
@@ -27,8 +25,12 @@ class gpio_in_out_functionality_test extends uvm_test;
     join
     phase.drop_objection(this);
     `uvm_info(get_full_name(),"after seq start",UVM_MEDIUM);
-  
-
   endtask
+
+  virtual function void report_phase(uvm_phase phase);
+    super.report_phase(phase);
+  endfunction
+
+
 endclass
  

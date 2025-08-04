@@ -9,7 +9,7 @@
 //#######################################################################################
 
 
-interface gpio_reg_if  (input logic clk, input logic rst_n);   
+interface gpio_reg_if  (input logic clk, output logic rst_n);   
   //Register Block Signals
   logic [`ADDR_WIDTH-1:0] ADDRESS; 
 
@@ -30,7 +30,7 @@ interface gpio_reg_if  (input logic clk, input logic rst_n);
   end
 
   //clocking block for register_model
-  clocking reg_model_cb @(posedge clk);
+  /*clocking reg_model_cb @(posedge clk);
     default input #0 output #0;
     output WRITE,WDATA,ADDRESS;
     input RDATA;
@@ -44,7 +44,7 @@ interface gpio_reg_if  (input logic clk, input logic rst_n);
 
   //modport for reg_model and monitor
   modport reg_model (clocking reg_model_cb,input clk,rst_n);
-  modport reg_monitor (clocking reg_monitor_cb,input clk,rst_n);
+  modport reg_monitor (clocking reg_monitor_cb,input clk,rst_n);*/
 
 
 

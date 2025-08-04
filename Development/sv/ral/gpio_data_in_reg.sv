@@ -23,7 +23,7 @@ class gpio_data_in_reg extends uvm_reg;
                         .size(`DATA_WIDTH),
 			.lsb_pos(0),
 			.access("RO"),
-			.volatile(0),
+			.volatile(1),
 			.reset(0),
 			.has_reset(1),
 			.is_rand(0),
