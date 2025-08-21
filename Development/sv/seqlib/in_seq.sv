@@ -1,22 +1,31 @@
-class in_seq extends uvm_sequence;
+class in_seq extends gpio_base_seq;
   `uvm_object_utils(in_seq)
-  gpio_transaction str;
-  virtual gpio_if gvif;
+
+  rand bit [`DATA_WIDTH-1:0] wdata;
 
   function new(string name = "in_seq");
     super.new(name);
   endfunction
 
+  task pre_body();
+    super.pre_body();
+  endtask
 
   task body();
-    if(!uvm_config_db#(virtual gpio_if)::get(null, "tb.gif", "gvif", gvif))
-      `uvm_error("GPIO_SEQ", "Error getting Interface Handle")
-    str = gpio_transaction::type_id::create("str");
-    start_item(str);
-    repeat(2)
-      @(posedge gvif.clk);
-    str.gpio_in = 32'hffffffff;
-    finish_item(str);
+    gtr = gpio_transaction::type_id::create("gtr");
+    repeat(tcfg.no_of_in_tx) begin
+      assert(this.randomize());
+      // Create and send transaction
+      start_item(gtr);
+      gtr.gpio_in = wdata;
+      finish_item(gtr);
+    end
+
+  endtask
+
+  task post_body();
+    super.post_body();
   endtask
 
 endclass
+

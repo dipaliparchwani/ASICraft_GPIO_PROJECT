@@ -1,31 +1,29 @@
-class gpio_intr_random_test extends gpio_base_test;
+class gpio_intr_random_test extends gpio_in_pattern_test;
   `uvm_component_utils(gpio_intr_random_test)
  
+  intr_random_seq irseq;
+  intr_clear_seq cseq;
   function new(input string name = "gpio_intr_random_test", uvm_component parent = null);
     super.new(name,parent);
   endfunction
  
-  gpio_in_random_seq irseq;
-  gpio_intr_with_random_mask_seq mseq;
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    mseq  = gpio_intr_with_random_mask_seq::type_id::create("mseq");
-    irseq   = gpio_in_random_seq::type_id::create("irseq");
+    irseq   = intr_random_seq::type_id::create("irseq");
+    cseq   = intr_clear_seq::type_id::create("cseq");
   endfunction
  
   virtual task run_phase(uvm_phase phase);
-  
     phase.raise_objection(this);
-    mseq.regmodel = genv.regmodel;
-    `uvm_info(get_full_name(),"before seq start",UVM_MEDIUM);
-    irseq.randomize with {no_of_txn == 20;};
-    mseq.randomize;
-    fork
-      irseq.start(genv.g_agent.gseqr);
-      mseq.start(genv.gr_agent.grseqr);
-    join
+    irseq.regmodel = genv.regmodel;
+    cseq.regmodel = genv.regmodel;
+    `uvm_info(get_full_name(),"before seq start",UVM_HIGH);
+    irseq.randomize;
+    irseq.start(genv.gr_agent.grseqr);
+    in_seq.start(genv.g_agent.gseqr);
+    cseq.start(genv.gr_agent.grseqr);
     phase.drop_objection(this);
-    `uvm_info(get_full_name(),"after seq start",UVM_MEDIUM);
+    `uvm_info(get_full_name(),"after seq start",UVM_HIGH);
   endtask
 
   virtual function void report_phase(uvm_phase phase);

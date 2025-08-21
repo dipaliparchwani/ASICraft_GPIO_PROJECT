@@ -1,7 +1,6 @@
 `include "uvm_macros.svh"
-`include "../sv/env/defines.sv"
 import uvm_pkg::*;
-import gpio_pkg::*;
+import test_pkg::*;
 
 module tb;
   logic clk = 0;
@@ -14,9 +13,8 @@ module tb;
   //gpio register interface handle
   gpio_reg_if grif (.clk(clk),.rst_n(rst_n));
 
-  clk_period_checker chk(.clk(clk),.clk_period(clk_period));
 
-  GPIO dut (.clk(clk),.rst_n(rst_n),.WRITE(grif.WRITE),.ADDRESS(grif.ADDRESS),.WDATA(grif.WDATA),.RDATA(grif.RDATA),.GPIO_IN(gif.gpio_in),.GPIO_OUT(gif.gpio_out),.GPIO_INTR(gif.gpio_intr));
+  GPIO #(`DATA_WIDTH)dut (.clk(clk),.rst_n(rst_n),.WRITE(grif.WRITE),.ADDRESS(grif.ADDRESS),.WDATA(grif.WDATA),.RDATA(grif.RDATA),.GPIO_IN(gif.gpio_in),.GPIO_OUT(gif.gpio_out),.GPIO_INTR(gif.gpio_intr));
 
   genvar i;
   generate
@@ -27,17 +25,34 @@ module tb;
         .gpio_in       (tb.dut.GPIO_IN[i]),
         .gpio_intr     (tb.dut.GPIO_INTR[i]),
         .intr_status   (tb.dut.INTR_STATUS[i]),
-        .intr_type     (tb.dut.INTR_TYPE[i]),
-        .intr_polarity (tb.dut.INTR_POLARITY[i]),
-        .intr_mask     (tb.dut.INTR_MASK[i])
+        .intr_type     (tb.dut.INTR_TYPE_REG[i]),
+        .intr_polarity (tb.dut.INTR_POLARITY_REG[i]),
+        .intr_mask     (tb.dut.INTR_MASK_REG[i]),
+	.gpio_out      (tb.dut.GPIO_OUT[i]),
+	.gpio_dir      (tb.dut.data_dir_reg[i]),
+	.data_out      (tb.dut.data_out_reg[i]),
+	.data_in       (tb.dut.data_in[i]),
+	.index(i)
+      );
+      gpio_coverage gpio_coverage_inst (
+        .clk           (tb.clk),
+        .rst_n         (tb.rst_n),
+        .gpio_in       (tb.dut.GPIO_IN[i]),
+        .gpio_intr     (tb.dut.GPIO_INTR[i]),
+        .intr_status   (tb.dut.INTR_STATUS[i]),
+        .intr_type     (tb.dut.INTR_TYPE_REG[i]),
+        .intr_polarity (tb.dut.INTR_POLARITY_REG[i]),
+        .intr_mask     (tb.dut.INTR_MASK_REG[i]),
+	.gpio_out      (tb.dut.GPIO_OUT[i]),
+	.gpio_dir      (tb.dut.data_dir_reg[i]),
+	.data_out      (tb.dut.data_out_reg[i]),
+	.data_in       (tb.dut.data_in[i])
       );
     end
   endgenerate
 
   initial begin
-    gif.print();
-    grif.print();
-    run_test("gpio_test");
+    run_test(" ");
   end
   initial begin
     if($value$plusargs("freq=%s", freq_str)) begin
@@ -79,15 +94,11 @@ module tb;
     forever #(clk_period / 2) clk = ~clk;  //clk designed based on  Frequency
   end
 
-  /*initial begin
-    rst_n = 1;
-    #5 rst_n = 0;
-    #10 rst_n = 1;
-  end*/
-
   initial begin
-    $dumpfile("gpio.vcd");
-    $dumpvars(0,tb);
+    rst_n = 1'b0;
+    #(5); 
+    rst_n = 1'b1;
   end
+
  
 endmodule

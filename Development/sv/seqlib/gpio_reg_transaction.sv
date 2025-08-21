@@ -9,7 +9,6 @@
 /******************************************************************************************************************/
 
 class gpio_reg_transaction extends uvm_sequence_item;
-
     rand logic [`ADDR_WIDTH-1 : 0] ADDRESS;
     rand logic [`DATA_WIDTH-1 : 0] WDATA;
     logic [`DATA_WIDTH-1 : 0]RDATA;

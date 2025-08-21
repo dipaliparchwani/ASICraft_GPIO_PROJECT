@@ -1,77 +1,97 @@
-module GPIO
-  #( parameter ADDR_WIDTH = 32,
-     parameter DATA_WIDTH = 32 ) (
-    input clk,
-    input rst_n,
-    input [ADDR_WIDTH-1:0]  ADDRESS,
-	input                   WRITE,
-	input [DATA_WIDTH-1:0]  WDATA,
-	input [DATA_WIDTH-1:0]  GPIO_IN,
-	input [DATA_WIDTH-1:0]  GPIO_DIR,
-    output [DATA_WIDTH-1:0] GPIO_OUT,
-	output [DATA_WIDTH-1:0] GPIO_INTR,
-    output [DATA_WIDTH-1:0] RDATA  
-  ); 
-  logic [DATA_WIDTH-1:0] t_data;
-  logic [DATA_WIDTH-1:0] prev_gpio;
-  reg [DATA_WIDTH-1:0] data_ingpio_intr_with_high_mask_seq;
-  reg [DATA_WIDTH-1:0] data_dir;
-  reg [DATA_WIDTH-1:0] data_out;
-  reg [DATA_WIDTH-1:0] INTR_MASK;
-  reg [DATA_WIDTH-1:0] INTR_POLARITY;
-  reg [DATA_WIDTH-1:0] INTR_STATUS;
-  reg [DATA_WIDTH-1:0] INTR_TYPE;
-  assign RDATA = t_data;
-  assign data_in = GPIO_IN;
-  assign GPIO_OUT = GPIO_DIR ? data_out : 'z;
-  assign GPIO_INTR = INTR_STATUS & INTR_MASK;
+module GPIO #(
+  DATA_WIDTH = 32,
+      ADDRESS_WIDTH =32
+ 
+      )(
+
+  input  logic                  clk,
+  input  logic                  rst_n,
+  // Register interface
+  input  logic                  WRITE,
+  input  logic [ADDRESS_WIDTH-1:0]            ADDRESS,
+  input  logic [DATA_WIDTH-1 :0]           WDATA,
+  output logic [DATA_WIDTH-1 :0]           RDATA,
+  // External interrupt inputs and output pin
+  input  logic [DATA_WIDTH-1:0]          GPIO_IN,
+      input  logic [DATA_WIDTH-1:0]          GPIO_DIR,
+  output logic [DATA_WIDTH-1:0]          GPIO_OUT,
+      output  logic [DATA_WIDTH-1:0]         GPIO_INTR
+ 
+      );
+
+  // Internal wires to/from DUT
+reg [DATA_WIDTH-1:0] data_in;
+
+ 
+reg [DATA_WIDTH-1:0] INTR_STATUS;
+
+ 
+
+   // Register storage
+logic [DATA_WIDTH-1:0] prev_gpio;
+logic [DATA_WIDTH-1:0] data_dir_reg;
+logic [DATA_WIDTH-1:0] data_out_reg;
+logic [DATA_WIDTH-1:0] INTR_MASK_REG;
+logic [DATA_WIDTH-1:0] INTR_POLARITY_REG;
+logic [DATA_WIDTH-1:0] INTR_TYPE_REG;
+  // Drive inputs to DUT
+  assign data_in         = !rst_n ? '0 : data_dir_reg ? data_in : GPIO_IN;
+
+  assign GPIO_OUT        = !rst_n ? '0 : data_dir_reg ? data_out_reg : GPIO_OUT;
+  assign GPIO_INTR = INTR_MASK_REG & INTR_STATUS;
+  // Register WRITE logic
   always @(posedge clk or negedge rst_n) begin
-    if (!rst_n)begin
-	   data_out     <= 0;
-       data_dir     <= 0;
-	   INTR_MASK       <= 0;
-	   INTR_POLARITY   <= 0;
-	   INTR_STATUS     <= 0;
-	   INTR_TYPE       <= 0;
-	end
-	else begin
-      if (WRITE) begin
-             if (ADDRESS == 32'h004) data_out         <= WDATA;
-        else if (ADDRESS == 32'h008) data_dir         <= WDATA;
-	    else if (ADDRESS == 32'h010) INTR_MASK        <= WDATA;
-	    else if (ADDRESS == 32'h014) INTR_STATUS      <= WDATA;
-	    else if (ADDRESS == 32'h018) INTR_TYPE        <= WDATA;
-	    else if (ADDRESS == 32'h01C) INTR_POLARITY    <= WDATA;
+      if (!rst_n) begin
+          data_dir_reg   <= '0;
+          data_out_reg    <= '0;
+          INTR_MASK_REG     <= '0;
+          INTR_POLARITY_REG <= '0;
+          INTR_STATUS  <= '0;
+      	  INTR_TYPE_REG  <= '0;
+      end else begin
+          if (WRITE) begin
+              case (ADDRESS)
+                  32'h04: data_out_reg       <= WDATA;
+                  32'h08: data_dir_reg       <= WDATA;
+                  32'h10: INTR_MASK_REG      <= WDATA;
+                  32'h14: INTR_STATUS        <= WDATA;
+                  32'h18: INTR_TYPE_REG      <= WDATA;
+      		  32'h1C: INTR_POLARITY_REG  <= WDATA;                    
+              endcase
+          end
+      		else begin
+              case (ADDRESS)
+                  32'h00: RDATA <= data_in;       
+                  32'h04: RDATA <= data_out_reg;
+                  32'h08: RDATA <= data_dir_reg;     
+                  32'h10: RDATA <= INTR_MASK_REG;     
+                  32'h14: RDATA <= INTR_STATUS;  
+                  32'h18: RDATA <= INTR_TYPE_REG;     
+      		  32'h1C: RDATA <= INTR_POLARITY_REG;                
+              endcase
+          end
       end
-      else if (!WRITE) begin
-	         if (ADDRESS == 32'h000) t_data     <= data_in;
-        else if (ADDRESS == 32'h004) t_data     <= data_out;
-        else if (ADDRESS == 32'h008) t_data     <= data_dir;
-	    else if (ADDRESS == 32'h010) t_data     <= INTR_MASK;
-	    else if (ADDRESS == 32'h014) t_data     <= INTR_STATUS;
-	    else if (ADDRESS == 32'h018) t_data     <= INTR_TYPE;
-	    else if (ADDRESS == 32'h01C) t_data     <= INTR_POLARITY;
-      end
-	end
-  end  
-  always @(posedge clk or negedge rst_n) begin
-        prev_gpio <= GPIO_IN;
-            for (int i = 0; i < DATA_WIDTH-1; i++) begin
-                if (INTR_TYPE[i] == 1'b1) begin
-                    // Edge interrupt
-                    if (INTR_POLARITY[i]) begin
-                        INTR_STATUS[i] <= ~prev_gpio[i] & GPIO_IN[i];  // rising
-                    end else begin
-                        INTR_STATUS[i] <= prev_gpio[i] & ~GPIO_IN[i];  // falling
-                    end
-                end else begin
-                    // Level interrupt
-                    if (INTR_POLARITY[i]) begin
-                        INTR_STATUS[i] <= GPIO_IN[i];   // high
-                    end else begin
-                        INTR_STATUS[i] <= ~GPIO_IN[i];  // low
-                    end
-                end
-		    end
   end
-endmodule 
+always @(posedge clk or negedge rst_n) begin
+      prev_gpio <= GPIO_IN;
+          for (int i = 0; i < DATA_WIDTH; i++) begin
+            if (INTR_TYPE_REG[i] == 1'b1) begin
+                  // Edge interrupt
+              if (INTR_POLARITY_REG[i]) begin
+                      INTR_STATUS[i] <= ~prev_gpio[i] & GPIO_IN[i];  // rising
+                  end else begin
+                      INTR_STATUS[i] <= prev_gpio[i] & ~GPIO_IN[i];  // falling
+                  end
+              end else begin
+                  // Level interrupt
+                if (INTR_POLARITY_REG[i]) begin
+                      INTR_STATUS[i] <= GPIO_IN[i];   // high
+                  end else begin
+                      INTR_STATUS[i] <= ~GPIO_IN[i];  // low
+                  end
+              end
+      	    end
+end
+endmodule
+
+  

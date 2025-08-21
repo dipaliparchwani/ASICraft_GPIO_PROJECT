@@ -2,48 +2,62 @@
 //----PROJECT_NAME : GPIO VIP                                                           #
 //----FILE_NAME    : gpio_interface.sv                                                  #
 //----COMPONENT    : GPIO INTERFACE                                                     #  
-//----DESCRIPTION  : interface can be re-used for other projects Also it becomes        #
-//----               easier to connect with the DUT and other verification components.  #
-//----CREATED_ON   : 21/07/2025                                                         #                                             
-//----CREATED_BY   : Dipali                                                             #
+//----DESCRIPTION  : This interface defines the GPIO signals: input, output,            #
+//----               and interrupt lines. It is reusable and simplifies connection to   #
+//----               both the DUT and UVM testbench components.                         #
 //#######################################################################################
-interface gpio_if (input logic clk, output logic rst_n);   
-  //GPIO Block Signals
-  logic [`DATA_WIDTH-1:0] gpio_in;    // External input to DUT   
 
-  logic [`DATA_WIDTH-1:0] gpio_out;   // Output from DUT   
+interface gpio_if (input logic clk, rst_n);
+  
+  //============================================
+  // GPIO Block Signals
+  //============================================
+  logic [`DATA_WIDTH-1:0] gpio_in;    // Driven by Testbench - represents external inputs
+  logic [`DATA_WIDTH-1:0] gpio_out;   // Driven by DUT - represents output pins
+  logic [`DATA_WIDTH-1:0] gpio_intr;  // Driven by DUT - interrupt status per pin
 
-  logic [`DATA_WIDTH-1:0] gpio_intr;  // Interrupts 
+  //============================================
+  // Interface Name for UVM config_db
+  //============================================
+  string inst_name = $sformatf("%m"); // Get hierarchical name of interface instance
 
-  string inst_name = $sformatf("%m");
-  function print();
-    $display("getting interface : %s",inst_name);
-  endfunction
 
+  // Register interface in UVM config DB
   initial begin
     virtual gpio_if gvif;
     gvif = interface::self();
-    uvm_config_db#(virtual gpio_if)::set(null,inst_name,"gvif",gvif);
+    uvm_config_db#(virtual gpio_if)::set(null, inst_name, "gvif", gvif);
   end
 
-  
- /* //clocking block for gpio
+
+  /*
+  // Clocking block for GPIO driver
   clocking gpio_cb @(posedge clk);
     default input #0 output #0;
     output gpio_in;
-    input gpio_out,gpio_intr;
-  endclocking:gpio_cb
+    input  gpio_out, gpio_intr;
+  endclocking: gpio_cb
 
-  //clocking block for monitor
+  // Clocking block for GPIO monitor
   clocking gmonitor_cb @(posedge clk);
     default input #0;
-    input gpio_in,gpio_out,gpio_intr;
-  endclocking:gmonitor_cb
+    input  gpio_in, gpio_out, gpio_intr;
+  endclocking: gmonitor_cb
 
-  //modport for gpio and monitor
-  modport gpio (clocking gpio_cb,input clk,rst_n);
-  modport gmonitor (clocking gmonitor_cb,input clk,rst_n);*/
+  // Modport for GPIO driver
+  modport gpio (
+    clocking gpio_cb,
+    input clk,
+    rst_n
+  );
 
+  // Modport for GPIO monitor
+  modport gmonitor (
+    clocking gmonitor_cb,
+    input clk,
+    rst_n
+  );
+  */
 
 
 endinterface   
