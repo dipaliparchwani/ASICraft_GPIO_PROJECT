@@ -1,30 +1,31 @@
-class gpio_in_out_functionality_test extends gpio_base_test;
-  `uvm_component_utils(gpio_in_out_functionality_test)
+class gpio_dir_random_test extends gpio_base_test;
+  `uvm_component_utils(gpio_dir_random_test)
  
-  function new(input string name = "gpio_in_out_functionality_test", uvm_component parent = null);
+  function new(input string name = "gpio_dir_random_test", uvm_component parent = null);
     super.new(name,parent);
   endfunction
 
+  //dir_in_seq diseq;
   in_seq iseq;
-  dir_out_seq doseq;
+  dir_random_seq drseq;
   out_drive_seq odseq; 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     iseq      =   in_seq::type_id::create("iseq");
-    doseq   =  dir_out_seq::type_id::create("doseq");
+    drseq   =  dir_random_seq::type_id::create("drseq");
     odseq     =  out_drive_seq::type_id::create("odseq");
   endfunction
  
   virtual task run_phase(uvm_phase phase);
     phase.raise_objection(this);
-    iseq.regmodel =  genv.regmodel;
-    doseq.regmodel =  genv.regmodel;
+    //iseq.regmodel =  genv.regmodel;
+    drseq.regmodel =  genv.regmodel;
     odseq.regmodel =  genv.regmodel;
 
     `uvm_info(get_type_name(),"before seq start",UVM_MEDIUM);
-    iseq.randomize();
+    drseq.randomize();
+    drseq.start(genv.gr_agent.grseqr);
     iseq.start(genv.g_agent.gseqr);
-    doseq.start(genv.gr_agent.grseqr);
     odseq.start(genv.gr_agent.grseqr);
     `uvm_info(get_full_name(),"after seq start",UVM_MEDIUM);
     phase.drop_objection(this);
@@ -41,4 +42,3 @@ class gpio_in_out_functionality_test extends gpio_base_test;
 
 
 endclass
- 
