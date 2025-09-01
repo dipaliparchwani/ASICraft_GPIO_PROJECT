@@ -43,14 +43,14 @@ class gpio_scoreboard extends uvm_scoreboard;
 
 // Receives GPIO monitor transaction and stores in queue
   function void write_gpio_tr(gpio_transaction gtr);
-    gtr.print();
+    `uvm_info(get_type_name(),$sformatf("gpio transaction packet : %0h",gtr.sprint()),UVM_LOW)
     gpio_q.push_back(gtr);
     gpio_total_no_packet++;
     `uvm_info(get_full_name(), $sformatf("count of gpio_no_total : %0d", gpio_total_no_packet), UVM_NONE)
   endfunction
 
   function void write_reg_tr(gpio_reg_transaction rtr);
-    rtr.print();
+    `uvm_info(get_type_name(),$sformatf("reg transaction packet : %0h",rtr.sprint()),UVM_LOW)
     reg_total_no_packet++;
   endfunction
 

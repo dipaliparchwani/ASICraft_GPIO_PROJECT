@@ -1,7 +1,6 @@
-class in_out_reg_seq extends uvm_reg_sequence;
+class in_out_reg_seq extends uvm_reg_base_seq;
   `uvm_object_utils(in_out_reg_seq)
   gpio_reg_block regmodel;
-  virtual gpio_reg_if grvif;
 
   function new(string name = "in_out_reg_seq");
     super.new(name);
@@ -22,10 +21,12 @@ class in_out_reg_seq extends uvm_reg_sequence;
     regmodel.gpio_dir_reg_inst.write(status,32'hffffffff);
     mdata = regmodel.gpio_dir_reg_inst.get_mirrored_value();
     `uvm_info("REG_SEQ", $sformatf("DIR Register mirrored value : %0h",mdata),UVM_NONE);
+    @(posedge grvif.clk);
     regmodel.gpio_data_out_reg_inst.write(status,32'h11111111);
     mdata = regmodel.gpio_data_out_reg_inst.get_mirrored_value();
     `uvm_info("REG_SEQ", $sformatf("write tx to dut data_out reg : %0h",mdata),UVM_NONE);
-    @(posedge grvif.clk);
+    repeat(2)
+      @(posedge grvif.clk);
   endtask
 
 endclass

@@ -15,6 +15,7 @@ class gpio_env extends uvm_env;
   gpio_agent     g_agent;          // GPIO pin-level agent
   gpio_reg_block regmodel;         // Register model instance
   gpio_adapter   adapter_inst;     // Adapter to convert reg2bus and bus2reg
+ // uvm_reg_predictor  #(gpio_reg_transaction)  predictor_inst;
   gpio_scoreboard gscb;            // Scoreboard for checking functional correctness
 
   //==========================================
@@ -36,7 +37,7 @@ class gpio_env extends uvm_env;
     gscb         = gpio_scoreboard::type_id::create("gscb", this);
     regmodel     = gpio_reg_block::type_id::create("regmodel", this);
     adapter_inst = gpio_adapter::type_id::create("adapter_inst", , get_full_name());
-
+    //predictor_inst = uvm_reg_predictor#(gpio_reg_transaction)::type_id::create("predictor_inst", this);
     // Build register model
     regmodel.build();
 
@@ -52,10 +53,11 @@ class gpio_env extends uvm_env;
 
     // Connect register monitor to scoreboard
     gr_agent.grmon.rmon_ap.connect(gscb.reg_imp);
+   // gr_agent.grmon.rmon_ap.connect(predictor_inst.bus_in);
 
     // Connect GPIO monitor to scoreboard
     g_agent.gmon.gmon_ap.connect(gscb.gpio_imp);
-
+    regmodel.default_map.set_auto_predict(1);
     // Connect register model to register sequencer via adapter
     regmodel.default_map.set_sequencer(
       .sequencer(gr_agent.grseqr),
@@ -64,6 +66,9 @@ class gpio_env extends uvm_env;
 
     // Set base address  for register accesses
     regmodel.default_map.set_base_addr(0);
+   // predictor_inst.map       = regmodel.default_map;
+   // predictor_inst.adapter   = adapter_inst;
+    
   endfunction 
  
 endclass

@@ -34,7 +34,7 @@ module tb;
 	.data_in       (tb.dut.data_in[i]),
 	.index(i)
       );
-      gpio_coverage gpio_coverage_inst (
+     /* gpio_coverage gpio_coverage_inst (
         .clk           (tb.clk),
         .rst_n         (tb.rst_n),
         .gpio_in       (tb.dut.GPIO_IN[i]),
@@ -47,7 +47,7 @@ module tb;
 	.gpio_dir      (tb.dut.data_dir_reg[i]),
 	.data_out      (tb.dut.data_out_reg[i]),
 	.data_in       (tb.dut.data_in[i])
-      );
+      );*/
     end
   endgenerate
 

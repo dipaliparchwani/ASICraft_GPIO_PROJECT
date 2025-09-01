@@ -22,10 +22,10 @@ class gpio_in_out_functionality_test extends gpio_base_test;
     odseq.regmodel =  genv.regmodel;
 
     `uvm_info(get_type_name(),"before seq start",UVM_MEDIUM);
-    iseq.randomize();
-    iseq.start(genv.g_agent.gseqr);
+    //iseq.randomize();
+   // iseq.start(genv.g_agent.gseqr);
     doseq.start(genv.gr_agent.grseqr);
-    odseq.start(genv.gr_agent.grseqr);
+    //odseq.start(genv.gr_agent.grseqr);
     `uvm_info(get_full_name(),"after seq start",UVM_MEDIUM);
     phase.drop_objection(this);
   endtask

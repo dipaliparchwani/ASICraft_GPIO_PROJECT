@@ -11,7 +11,7 @@ class gpio_reg_driver extends uvm_driver #(gpio_reg_transaction);
   `uvm_component_utils(gpio_reg_driver)
 
   // Declare a Virtual Interface for GPIO REG driver                           
-  virtual gpio_reg_if grvif;
+  virtual gpio_reg_if.reg_model grvif;
   // Declare an instance of GPIO REG transaction
   gpio_reg_transaction dtr;
   gpio_test_cfg tcfg;
@@ -49,9 +49,9 @@ class gpio_reg_driver extends uvm_driver #(gpio_reg_transaction);
 
   task init();
     wait(grvif.rst_n == 1'b0);
-    grvif.WRITE   <= 1'b0;
-    grvif.WDATA   <= 'b0;
-    grvif.ADDRESS <= 'b0;
+    grvif.reg_model_cb.WRITE   <= 1'b0;
+    grvif.reg_model_cb.WDATA   <= 'b0;
+    grvif.reg_model_cb.ADDRESS <= 'b0;
   endtask
 
   task drive();
@@ -62,35 +62,33 @@ class gpio_reg_driver extends uvm_driver #(gpio_reg_transaction);
       fork 
 	begin : Transfer
 	  wait(grvif.rst_n == 1'b1);
-	  @(posedge grvif.clk);
-          grvif.WRITE   <= dtr.WRITE;
-          grvif.ADDRESS <= dtr.ADDRESS;
-          grvif.WDATA   <= dtr.WDATA;
+	  @(posedge grvif.reg_model_cb);
+          grvif.reg_model_cb.WRITE   <= dtr.WRITE;
+          grvif.reg_model_cb.ADDRESS <= dtr.ADDRESS;
+          grvif.reg_model_cb.WDATA   <= dtr.WDATA;
 	  if(!dtr.WRITE) begin
-	    repeat(2)
-	      @(posedge grvif.clk);
-	    dtr.RDATA     = grvif.RDATA;
+	      @(posedge grvif.reg_model_cb);
+	    dtr.RDATA     = grvif.reg_model_cb.RDATA;
 	  end
-	  `uvm_info(get_type_name(),$sformatf("ADDRESS: %0h, WRITE: %0h, WDATA: %0h, RDATA: %0h",dtr.ADDRESS, dtr.WRITE, dtr.WDATA,grvif.RDATA),UVM_NONE)
-	  //@(posedge grvif.clk);
-	  if(grvif.ADDRESS == 32'h04)begin
-	    @(posedge grvif.clk);
+	  `uvm_info(get_type_name(),$sformatf("ADDRESS: %0h, WRITE: %0h, WDATA: %0h, RDATA: %0h",grvif.reg_model_cb.ADDRESS, grvif.reg_model_cb.WRITE, grvif.reg_model_cb.WDATA,dtr.RDATA),UVM_NONE)
+	  if(grvif.reg_model_cb.ADDRESS == 32'h04)begin
+	    @(posedge grvif.reg_model_cb);
 	    tcfg.tx_detect <= tcfg.tx_detect+1;
           end
         end
 
        begin : Reset
 	 wait(grvif.rst_n == 1'b0)
-         grvif.WRITE   <= 1'b0;
-         grvif.WDATA   <= 'b0;
-         grvif.ADDRESS <= 'b0;
+         grvif.reg_model_cb.WRITE   <= 1'b0;
+         grvif.reg_model_cb.WDATA   <= 'b0;
+         grvif.reg_model_cb.ADDRESS <= 'b0;
 	 `uvm_info(get_type_name(), "TRANSFER IS INTERRUPTED BY RESET", UVM_MEDIUM)
         end
       join_any
       disable fork;
-      `uvm_info("REG_DRV",$sformatf("ADDRESS: %0h, WRITE: %0h, RDATA: %0h",grvif.ADDRESS, grvif.WRITE, grvif.RDATA),UVM_NONE)
+     // `uvm_info("REG_DRV",$sformatf("ADDRESS: %0h, WRITE: %0h, RDATA: %0h",grvif.reg_model_cb.ADDRESS, grvif.reg_model_cb.WRITE, grvif.reg_model_cb.RDATA),UVM_NONE)
       seq_item_port.item_done();
-      `uvm_info("REG_DRV",$sformatf("ADDRESS: %0h, WRITE: %0h, RDATA: %0h",grvif.ADDRESS, grvif.WRITE, grvif.RDATA),UVM_NONE)
+     // `uvm_info("REG_DRV",$sformatf("ADDRESS: %0h, WRITE: %0h, RDATA: %0h",grvif.reg_model_cb.ADDRESS, grvif.reg_model_cb.WRITE, grvif.reg_model_cb.RDATA),UVM_NONE)
     end
   endtask : drive
 

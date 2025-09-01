@@ -14,9 +14,9 @@ class gpio_active_low_reset_test extends gpio_base_test;
     iseq   = in_seq::type_id::create("iseq");
   endfunction
 
-  virtual task reset_phase(uvm_phase phase);
+  /*virtual task reset_phase(uvm_phase phase);
     super.reset_phase(phase);
-  endtask
+  endtask*/
  
   virtual task run_phase(uvm_phase phase);
   

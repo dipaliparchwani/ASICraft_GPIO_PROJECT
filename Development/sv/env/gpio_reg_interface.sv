@@ -25,7 +25,7 @@ interface gpio_reg_if(input logic clk, input logic rst_n);
   end
 
 
-  /*
+  
   // Clocking block for Register Model (Driver)
   clocking reg_model_cb @(posedge clk);
     default input #0 output #0;
@@ -44,6 +44,6 @@ interface gpio_reg_if(input logic clk, input logic rst_n);
 
   // Modport for monitor
   modport reg_monitor (clocking reg_monitor_cb, input clk, rst_n);
-  */
+  
 
 endinterface   
